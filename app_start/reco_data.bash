@@ -5,3 +5,4 @@ chmod 0777 /backups
 rsync -aAXv app_marks /backups/
 sudo su postgres
 pg_dump -d appmarks > /backups/appmarks.dmp
+exit
