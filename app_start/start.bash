@@ -13,7 +13,7 @@ else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manual
 #запуск сервера postgres
 sudo systemctl enable postgresql;
 sudo systemctl start postgresql.service;
-sudo -ui postgres;
+sudo -i -u postgres;
 psql -c 'CREATE DATABASE appmarks'; 
 exit;
 # зависимости приложения
