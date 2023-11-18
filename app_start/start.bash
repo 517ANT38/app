@@ -3,7 +3,7 @@
 #установка необхомимых пакетов
 
 function install_pack {
-    packagesNeeded='curl jq postgresql-server postgresql-contrib'
+    packagesNeeded='curl jq postgresql-server postgresql-contrib firewalld net-tools'
     if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
     elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
     elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
@@ -19,6 +19,11 @@ pg_config --version || install_pack
 #запуск сервера postgres
 
 sudo -u postgres psql -c 'CREATE DATABASE appmarks'; 
+
+#Настройка портов
+sudo firewall-cmd --permanent --add-port=8080/tcp 
+sudo firewall-cmd --permanent --add-port=4567/tcp 
+sudo firewall-cmd --reload
 
 # зависимости приложения
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
