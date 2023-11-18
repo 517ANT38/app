@@ -30,8 +30,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 source ~/.bashrc
 nvm install node
 nvm install-latest-npm
-cd app_marks
-npm install
+
+cd app_marks && npm install || echo 'error'
+
 #запуск приложения
 cd -
 npm install pm2 -g
