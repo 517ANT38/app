@@ -26,8 +26,9 @@ sudo -u postgres psql -c 'ALTER DATABASE appmarks OWNER TO myapp';
 tp='host   all             myapp             localhost                   md5';
 
 
-sudo su - && echo $tp >> /etc/postgres/**/main/pg_hba.conf || sudo su - && echo $tp >> /var/lib/pgsql/pg_hba.conf
-exit
+sudo -u postgres echo $tp >> /etc/postgres/**/main/pg_hba.conf || echo 'Файла нет'
+sudo -u postgres echo $tp >> /var/lib/pgsql/pg_hba.conf || echo 'Файла нет'
+
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
 sudo firewall-cmd --permanent --add-port=4567/tcp 
