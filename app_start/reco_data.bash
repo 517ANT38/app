@@ -5,4 +5,4 @@ sudo chown $USER:$USER /backups
 chmod 0777 /backups
 cd ..
 rsync -aAXv app_marks /backups/
-sudo -u postgres pg_dump -d appmarks > /backups/appmarks.dmp
+sudo -u postgres pg_dump -C -d appmarks > /backups/appmarks.dmp

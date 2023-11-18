@@ -17,9 +17,11 @@ function install_pack {
 }
 netstat -tuln | grep 5432 || install_pack
 #запуск сервера postgres
-sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres'"
+sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
+
 sudo -u postgres psql -c 'CREATE DATABASE appmarks' || echo 'БД appmarks уже существует'; 
 
+sudo -u postgres psql -c 'ALTER DATABASE appmarks OWNER TO myapp';
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
 sudo firewall-cmd --permanent --add-port=4567/tcp 

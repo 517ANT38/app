@@ -4,10 +4,10 @@ const { Sequelize ,DataTypes} = require('sequelize');
 
 const connection=new Sequelize({
     database:"appmarks",
-    username:"postgres",
+    username:"myapp",
     port:5432,
     dialect:"postgres",
-    password:"postgres",
+    password:"myapp",
     host:"localhost",
     logging: false,
     timezone: '+04:00'
