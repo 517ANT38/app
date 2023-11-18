@@ -16,7 +16,7 @@ if [ -x "$(pg_config --version)" ]; then
 fi
 #запуск сервера postgres
 
-sudo -i -u postgres;
+sudo su postgres;
 psql -c 'CREATE DATABASE appmarks'; 
 exit;
 # зависимости приложения
