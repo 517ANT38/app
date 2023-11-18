@@ -15,7 +15,7 @@ sudo systemctl enable postgresql
 sudo systemctl start postgresql.service
 sudo su postgres
 
-psql -c 'CREATE DATABASE appmarks' ||  echo 'Database appmarks exists' > &2; 
+psql -c 'CREATE DATABASE appmarks'; 
 exit
 # зависимости приложения
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
