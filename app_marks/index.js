@@ -5,7 +5,7 @@ const controllers=require("./controllers");
 const services=require("./services");
 
 
-const PORT = 8080;
+const PORT = 4567 || 8080;
 const router=express.Router;
 const app=express();
 app.use((req,res,next)=>{
