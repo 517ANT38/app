@@ -29,7 +29,7 @@ npm install pm2 -g
 cd app_marks
 npm install
 #запуск приложения
-pm2 start -f --name app app_marks/index.js 
+pm2 start -f --name app index.js 
 pm2 save
 cd -
 
