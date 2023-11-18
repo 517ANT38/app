@@ -6,7 +6,7 @@ sudo apt update
 sudo apt install postgresql postgresql-contrib
 sudo systemctl start postgresql.service
 sudo su postgres
-psql  --file=app_start/create_database.sql
+psql --file=app_start/create_database.sql
 exit
 cd app_marks
 npm install
