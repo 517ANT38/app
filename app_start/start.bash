@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd app_start || echo 'Вы в каталоге app_start'
 #установка необхомимых пакетов
 
 function install_pack {
