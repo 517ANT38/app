@@ -18,7 +18,7 @@ function install_pack {
 pg_config --version || install_pack
 #запуск сервера postgres
 
-sudo -u postgres psql -c 'CREATE DATABASE appmarks'; 
+sudo -u postgres psql -c 'CREATE DATABASE appmarks' || echo 'БД appmarks уже существует'; 
 
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
