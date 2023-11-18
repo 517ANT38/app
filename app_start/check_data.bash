@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ls -R /app/app_marks/ | more
+ls -R app_marks/ | more
 echo "---------------------------------------------------------------------------"
 echo 'Users:'
 curl --ipv4 --location 'http://localhost:4567/api/users' | jq . | more
