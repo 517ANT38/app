@@ -15,7 +15,7 @@ sudo systemctl enable postgresql
 sudo systemctl start postgresql.service
 sudo su postgres
 psql --file=app_start/create_database.sql
-exit
+
 # зависимости приложения
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 source ~/.bashrc
