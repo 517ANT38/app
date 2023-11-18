@@ -15,7 +15,7 @@ function install_pack {
     sudo postgresql-setup --initdb --unit postgresql
     sudo systemctl start postgresql.service;
 }
-pg_config -V || install_pack
+pg_config --version || install_pack
 #запуск сервера postgres
 
 sudo -u postgres psql -c 'CREATE DATABASE appmarks'; 
