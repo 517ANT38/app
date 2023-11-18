@@ -17,7 +17,7 @@ function install_pack {
 }
 netstat -tuln | grep 5432 || install_pack
 #запуск сервера postgres
-
+sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres'"
 sudo -u postgres psql -c 'CREATE DATABASE appmarks' || echo 'БД appmarks уже существует'; 
 
 #Настройка портов
