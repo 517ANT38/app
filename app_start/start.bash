@@ -16,9 +16,8 @@ if [ -x "$(pg_config --version)" ]; then
 fi
 #запуск сервера postgres
 
-sudo su postgres;
-psql -c 'CREATE DATABASE appmarks'; 
-exit;
+sudo -u postgres psql -c 'CREATE DATABASE appmarks'; 
+
 # зависимости приложения
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 source ~/.bashrc
