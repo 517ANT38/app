@@ -2,17 +2,19 @@
 
 #установка необхомимых пакетов
 packagesNeeded='curl jq postgresql postgresql-contrib'
-if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
-elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
-elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
-elif [ -x "$(command -v dnf)" ];     then sudo dnf install $packagesNeeded
-elif [ -x "$(command -v zypper)" ];  then sudo zypper install $packagesNeeded
-elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
-else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
-
+if [ -x "$(pg_config --version)" ]; then
+    if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
+    elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
+    elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
+    elif [ -x "$(command -v dnf)" ];     then sudo dnf install $packagesNeeded
+    elif [ -x "$(command -v zypper)" ];  then sudo zypper install $packagesNeeded
+    elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
+    else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
+    sudo systemctl enable postgresql;
+    sudo systemctl start postgresql.service;
+fi
 #запуск сервера postgres
-sudo systemctl enable postgresql;
-sudo systemctl start postgresql.service;
+
 sudo -i -u postgres;
 psql -c 'CREATE DATABASE appmarks'; 
 exit;
