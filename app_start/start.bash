@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #установка необхомимых пакетов
-packagesNeeded='curl jq postgresql postgresql-contrib'
+packagesNeeded='curl jq postgresql-server postgresql-contrib'
 if [ -x "$(pg_config --version)" ]; then
     if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
     elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
@@ -11,6 +11,7 @@ if [ -x "$(pg_config --version)" ]; then
     elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
     else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
     sudo systemctl enable postgresql;
+    sudo postgresql-setup --initdb --unit postgresql
     sudo systemctl start postgresql.service;
 fi
 #запуск сервера postgres
