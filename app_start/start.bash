@@ -44,12 +44,12 @@ sudo firewall-cmd --permanent --add-port=4567/tcp
 sudo firewall-cmd --reload
 
 # зависимости приложения
+cd ..
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 source ~/.bashrc
 nvm install node
 nvm install-latest-npm
 npm install pm2 -g
-cd ..
 cd app_marks 
 npm install 
 
