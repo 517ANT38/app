@@ -46,6 +46,7 @@ sudo firewall-cmd --reload
 # зависимости приложения
 cd ..
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+pwd
 source ~/.bashrc
 nvm install node
 nvm install-latest-npm
