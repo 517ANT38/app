@@ -9,28 +9,36 @@ cd app_start || error_exit 'Вы в каталоге app_start'
 #установка необхомимых пакетов
 
 
-packagesNeeded='curl jq firewalld net-tools postgresql-contrib postgresql'
-if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
-elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
-elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
-elif [ -x "$(command -v dnf)" ];     then sudo dnf install $packagesNeeded'-server'
-elif [ -x "$(command -v zypper)" ];  then sudo zypper install $packagesNeeded
-elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
-else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
-sudo systemctl enable postgresql;
-sudo postgresql-setup --initdb --unit postgresql
+pd='curl jq firewalld net-tools'
+pp='postgresql-contrib postgresql'
+function install_packages(){
+    if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $1
+    elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $1
+    elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $1
+    elif [ -x "$(command -v dnf)" ];     then sudo dnf install $1'-server'
+    elif [ -x "$(command -v zypper)" ];  then sudo zypper install $1
+    elif [ -x "$(command -v yum)" ];  then sudo yum install $1
+    else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $1">&2; fi
+}
 
-sudo chmod -R o+wrx /etc/postgresql
-sudo chmod -R o+wrx /var/lib/pgsql
-sudo chmod 0750 /var/lib/pgsql/data
-sudo chmod 0750 o+wrx /etc/postgresql/**/data
+# Проверяем, установлен ли пакет postgresql
+if dpkg -s postgresql >/dev/null 2>&1; then
+    
+    install_packages pp;
+    sudo systemctl enable postgresql;
+    sudo postgresql-setup --initdb --unit postgresql
 
-sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет'; 
-sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
-sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
-sudo echo 'all all all all trust' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
-sudo systemctl start postgresql.service;
+    sudo chmod -R o+wrx /etc/postgresql
+    sudo chmod 0750 o+wrx /etc/postgresql/**/data
 
+    sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет'; 
+    sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+    sudo systemctl start postgresql.service;
+else
+    echo "Сервер PostgreSQL установлен."
+fi
+
+install_packages pd
 
 #запуск сервера postgres
 sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
