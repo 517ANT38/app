@@ -24,7 +24,7 @@ function install_packages(){
 # Проверяем, установлен ли пакет postgresql
 if dpkg -s postgresql >/dev/null 2>&1; then
     
-    install_packages pp;
+    install_packages $pp;
     sudo systemctl enable postgresql;
     sudo postgresql-setup --initdb --unit postgresql
 
@@ -38,7 +38,7 @@ else
     echo "Сервер PostgreSQL установлен."
 fi
 
-install_packages pd
+install_packages $pd
 
 #запуск сервера postgres
 sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
