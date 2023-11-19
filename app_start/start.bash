@@ -59,4 +59,4 @@ pm2 save
 
 cd ..
 
-sudo -u postgres psql -c 'GRANT ALL PRIVILEGES appmarks.* TO myapp';
+sudo -u postgres psql -c 'GRANT ALL PRIVILEGES ON appmarks.* TO myapp';
