@@ -19,12 +19,16 @@ elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
 else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
 sudo systemctl enable postgresql;
 sudo postgresql-setup --initdb --unit postgresql
+
 sudo chmod -R o+wrx /etc/postgresql
 sudo chmod -R o+wrx /var/lib/pgsql
 sudo chmod 0750 /var/lib/pgsql/data
 sudo chmod 0750 o+wrx /etc/postgresql/**/data
-sudo echo 'host   all             myapp             all                   md5' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
-sudo echo 'host   all             myapp             all                   md5' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
+
+sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет'; 
+sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host   all             all             0.0.0.0/0                   md5' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host   all             all             0.0.0.0/0                   md5' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
 sudo systemctl start postgresql.service;
 
 
