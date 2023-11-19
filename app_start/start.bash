@@ -5,6 +5,9 @@ error_exit(){
     exit 1
 }
 
+if ! [ -x "$(command -v sudo)" ];  then
+    error_exit 'Sudo not found'
+fi
 
 cd app_start || error_exit 'Вы в каталоге app_start'
 #установка необхомимых пакетов
