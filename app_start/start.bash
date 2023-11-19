@@ -8,20 +8,20 @@ error_exit(){
 cd app_start || error_exit 'Вы в каталоге app_start'
 #установка необхомимых пакетов
 
-function install_pack {
-    packagesNeeded='curl jq postgresql-server postgresql-contrib firewalld net-tools'
-    if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
-    elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
-    elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
-    elif [ -x "$(command -v dnf)" ];     then sudo dnf install $packagesNeeded
-    elif [ -x "$(command -v zypper)" ];  then sudo zypper install $packagesNeeded
-    elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
-    else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
-    sudo systemctl enable postgresql;
-    sudo postgresql-setup --initdb --unit postgresql
-    sudo systemctl start postgresql.service;
-}
-netstat -tuln | grep 5432 || install_pack
+
+packagesNeeded='curl jq postgresql-server postgresql-contrib firewalld net-tools'
+if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
+elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
+elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
+elif [ -x "$(command -v dnf)" ];     then sudo dnf install $packagesNeeded
+elif [ -x "$(command -v zypper)" ];  then sudo zypper install $packagesNeeded
+elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
+else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
+sudo systemctl enable postgresql;
+sudo postgresql-setup --initdb --unit postgresql
+sudo systemctl start postgresql.service;
+
+
 #запуск сервера postgres
 sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
 
@@ -59,4 +59,4 @@ pm2 save
 
 cd ..
 
-sudo -u postgres psql -c 'GRANT ALL PRIVILEGES ON appmarks.* TO myapp';
+sudo -u postgres psql -c 'REASSIGN OWNED BY postgres TO myapp';
