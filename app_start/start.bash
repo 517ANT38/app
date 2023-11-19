@@ -1,7 +1,8 @@
 #!/bin/bash
 
 error_exit(){
-    echo "error: $1"
+    echo "error: $1">&2
+    exit 1
 }
 
 
@@ -18,24 +19,27 @@ function install_packages(){
     elif [ -x "$(command -v dnf)" ];     then sudo dnf install $1'-server'
     elif [ -x "$(command -v zypper)" ];  then sudo zypper install $1
     elif [ -x "$(command -v yum)" ];  then sudo yum install $1
-    else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $1">&2; fi
+    else error_exit "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $1"; fi
 }
 
 # Проверяем, установлен ли пакет postgresql
-if dpkg -s postgresql >/dev/null 2>&1; then
-    
+if [ -x "$(command -v postgres -V)" ]; then    
+    echo "Сервер PostgreSQL установлен."
+else    
     install_packages $pp;
     sudo systemctl enable postgresql;
     sudo postgresql-setup --initdb --unit postgresql
 
-    sudo chmod -R o+wrx /etc/postgresql
-    sudo chmod 0750 o+wrx /etc/postgresql/**/data
+    sudo chmod -R o+wrx /etc/postgresql && sudo chmod 0750 o+wrx /etc/postgresql/**/data ||
+    sudo chmod -R o+wrx /var/lib/pgsql && sudo chmod 0750 /var/lib/pgsql/data || error_exit 'Каталога нет';
 
-    sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет'; 
-    sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+    sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || 
+    sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf  ||error_exit 'Файла нет'; 
+    
+    sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf 
+    || sudo echo 'all all all all trust' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
+ 
     sudo systemctl start postgresql.service;
-else
-    echo "Сервер PostgreSQL установлен."
 fi
 
 install_packages $pd
@@ -56,7 +60,7 @@ sudo firewall-cmd --permanent --add-port=4567/tcp
 sudo firewall-cmd --reload
 
 # зависимости приложения
-cd /
+cd ~
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 source ~/.bashrc
 nvm install node
