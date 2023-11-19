@@ -9,7 +9,7 @@ cd app_start || error_exit 'Вы в каталоге app_start'
 #установка необхомимых пакетов
 
 
-packagesNeeded='curl jq firewalld net-tools postgresql-contrib postgresql-common postgresql'
+packagesNeeded='curl jq firewalld net-tools postgresql-contrib postgresql'
 if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $packagesNeeded
 elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $packagesNeeded
 elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $packagesNeeded
