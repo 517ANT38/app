@@ -47,10 +47,10 @@ sudo firewall-cmd --reload
 cd ~
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 source ~/.bashrc
-cd ~/app
 nvm install node
 nvm install-latest-npm
 npm install pm2 -g
+cd ~/app
 cd app_marks 
 npm install 
 
