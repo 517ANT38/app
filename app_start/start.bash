@@ -2,7 +2,6 @@
 
 error_exit(){
     echo "error: $1"
-    exit 1
 }
 
 
@@ -30,11 +29,15 @@ sudo -u postgres psql -c 'CREATE DATABASE appmarks' || echo 'БД appmarks уж�
 
 sudo -u postgres psql -c 'ALTER DATABASE appmarks OWNER TO myapp';
 
+sudo 
+
+
 tp='host   all             myapp             localhost                   md5';
 
-
-sudo -u postgres echo $tp >> /etc/postgres/**/main/pg_hba.conf || error_exit 'Файла нет';
-sudo -u postgres echo $tp >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
+sudo chmod -R o+wrx /etc/postgresql
+sudo chmod -R o+wrx /var/lib/pgsql
+sudo echo $tp >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+sudo echo $tp >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
 
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
@@ -57,4 +60,4 @@ pm2 save
 
 cd ..
 
-
+# sudo -u postgres psql -c 'GRANT ALL PRIVILEGES appmarks.* TO myapp';
