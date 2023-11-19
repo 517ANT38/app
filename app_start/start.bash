@@ -27,8 +27,8 @@ sudo chmod 0750 o+wrx /etc/postgresql/**/data
 
 sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет'; 
 sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
-sudo echo 'host    all             all             ::1/128                 password' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
-sudo echo 'host    all             all             ::1/128                 password' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host all all all trust' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host all all all trust' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
 sudo systemctl start postgresql.service;
 
 
