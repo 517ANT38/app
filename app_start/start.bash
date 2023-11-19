@@ -28,8 +28,7 @@ sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
 sudo -u postgres psql -c 'CREATE DATABASE appmarks' || echo 'БД appmarks уже существует'; 
 
 sudo -u postgres psql -c 'ALTER DATABASE appmarks OWNER TO myapp';
-
-sudo 
+ 
 
 
 tp='host   all             myapp             localhost                   md5';
@@ -60,4 +59,4 @@ pm2 save
 
 cd ..
 
-# sudo -u postgres psql -c 'GRANT ALL PRIVILEGES appmarks.* TO myapp';
+sudo -u postgres psql -c 'GRANT ALL PRIVILEGES appmarks.* TO myapp';
