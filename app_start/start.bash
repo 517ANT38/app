@@ -1,5 +1,12 @@
 #!/bin/bash
-cd app_start || echo 'Вы в каталоге app_start'
+
+error_exit(){
+    echo "error: $1"
+    exit 1
+}
+
+
+cd app_start || error_exit 'Вы в каталоге app_start'
 #установка необхомимых пакетов
 
 function install_pack {
@@ -26,8 +33,8 @@ sudo -u postgres psql -c 'ALTER DATABASE appmarks OWNER TO myapp';
 tp='host   all             myapp             localhost                   md5';
 
 
-sudo -u postgres echo $tp >> /etc/postgres/**/main/pg_hba.conf || echo 'Файла нет'; exit;
-sudo -u postgres echo $tp >> /var/lib/pgsql/pg_hba.conf || echo 'Файла нет'; exit;
+sudo -u postgres echo $tp >> /etc/postgres/**/main/pg_hba.conf || error_exit 'Файла нет';
+sudo -u postgres echo $tp >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
 
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
