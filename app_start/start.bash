@@ -37,7 +37,7 @@ else
     sudo chmod -R o+wrx /var/lib/pgsql && sudo chmod 0750 /var/lib/pgsql/data || error_exit 'Каталога нет';
 
     sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || 
-    sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf  ||error_exit 'Файла нет'; 
+    sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf  ||error_exit 'Файла нет'; 
     
     sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf 
     || sudo echo 'all all all all trust' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
@@ -69,7 +69,8 @@ source ~/.bashrc
 nvm install node
 nvm install-latest-npm
 npm install pm2 -g
-cd ~/app
+cd -
+cd ..
 cd app_marks 
 npm install 
 
