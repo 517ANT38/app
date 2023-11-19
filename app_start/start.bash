@@ -31,12 +31,11 @@ sudo -u postgres psql -c 'ALTER ROLE myapp WITH SUPERUSER';
  
 
 
-tp='host   all             myapp             localhost                   md5';
 
 sudo chmod -R o+wrx /etc/postgresql
 sudo chmod -R o+wrx /var/lib/pgsql
-sudo echo $tp >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
-sudo echo $tp >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host   all             myapp             localhost                   md5' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host   all             myapp             localhost                   md5' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
 
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
