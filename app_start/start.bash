@@ -19,6 +19,10 @@ elif [ -x "$(command -v yum)" ];  then sudo yum install $packagesNeeded
 else echo "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $packagesNeeded">&2; fi
 sudo systemctl enable postgresql;
 sudo postgresql-setup --initdb --unit postgresql
+sudo chmod -R o+wrx /etc/postgresql
+sudo chmod -R o+wrx /var/lib/pgsql
+sudo echo 'host   all             myapp             localhost                   md5' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
+sudo echo 'host   all             myapp             localhost                   md5' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
 sudo systemctl start postgresql.service;
 
 
@@ -32,11 +36,6 @@ sudo -u postgres psql -c 'ALTER ROLE myapp WITH SUPERUSER';
 
 
 
-sudo chmod -R o+wrx /etc/postgresql
-sudo chmod -R o+wrx /var/lib/pgsql
-sudo echo 'host   all             myapp             localhost                   md5' >> /etc/postgresql/**/main/pg_hba.conf || error_exit 'Файла нет';
-sudo echo 'host   all             myapp             localhost                   md5' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
-sudo systemctl restart postgresql.service;
 #Настройка портов
 sudo firewall-cmd --permanent --add-port=8080/tcp 
 sudo firewall-cmd --permanent --add-port=4567/tcp 
