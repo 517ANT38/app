@@ -32,6 +32,7 @@ else
     install_packages $pp;
     sudo systemctl enable postgresql;
     sudo postgresql-setup --initdb --unit postgresql
+    sudo systemctl start postgresql.service;
 
     sudo chmod -R o+wrx /etc/postgresql && sudo chmod 0750 o+wrx /etc/postgresql/**/data ||
     sudo chmod -R o+wrx /var/lib/pgsql && sudo chmod 0750 /var/lib/pgsql/data || error_exit 'Каталога нет';
@@ -42,7 +43,7 @@ else
     sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf 
     || sudo echo 'all all all all trust' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
  
-    sudo systemctl start postgresql.service;
+    sudo systemctl restart postgresql.service;
 fi
 
 install_packages $pd
