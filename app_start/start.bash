@@ -9,7 +9,7 @@ if ! [ -x "$(command -v sudo)" ];  then
     error_exit 'Sudo not found'
 fi
 
-cd app_start || error_exit 'Вы в каталоге app_start'
+cd $(dirname $0);
 #установка необхомимых пакетов
 
 
