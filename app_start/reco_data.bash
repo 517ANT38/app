@@ -5,7 +5,7 @@ sudo chown $USER:$USER /backups
 chmod 0777 /backups
 cd ..
 
-if [ $(pm2 describe app) ] then 
+if [ $(pm2 describe app) ]; then 
     echo 'server oneline';
     exit 1
 else
