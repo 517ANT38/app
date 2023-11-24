@@ -1,3 +1,4 @@
+#!/bin/bash
 error_exit(){
     echo "error: $1">&2
     exit 1
