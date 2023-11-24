@@ -1,6 +1,5 @@
 #!/bin/bash
 
-source start.bash
 
 cd $(dirname $0) || error_exit '';
 cd ..
