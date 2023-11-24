@@ -26,7 +26,7 @@ function init_db_elem(){
 
     sudo -u postgres psql -c 'ALTER ROLE myapp WITH SUPERUSER';
 }
-
+#запуск сервера postgres
 function init_dnf_yum(){
     install_packages 'postgresql-server';
     sudo postgresql-setup --initdb --unit postgresql
@@ -59,7 +59,7 @@ fi
 
 install_packages $pd
 
-#запуск сервера postgres
+
 
  
 
