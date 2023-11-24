@@ -66,8 +66,8 @@ install_packages $pd
 
 
 #Настройка портов
-sudo firewall-cmd --permanent --add-port=8080/tcp 
-sudo firewall-cmd --permanent --add-port=4567/tcp 
+sudo firewall-cmd --list-ports | grep '8080/tcp' || sudo firewall-cmd --permanent --add-port=8080/tcp 
+sudo firewall-cmd --list-ports | grep '4567/tcp' || sudo firewall-cmd --permanent --add-port=4567/tcp 
 sudo firewall-cmd --reload
 
 # зависимости приложения
