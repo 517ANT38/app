@@ -73,7 +73,8 @@ sudo firewall-cmd --reload
 # зависимости приложения
 cd ~
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-source ~/.bashrc
+export NVM_DIR=$HOME/.nvm;
+source $NVM_DIR/nvm.sh;
 nvm install node
 nvm install-latest-npm
 npm install pm2 -g
