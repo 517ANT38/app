@@ -5,11 +5,13 @@ error_exit(){
     exit 1
 }
 
+export -f error_exit
+
 if ! [ -x "$(command -v sudo)" ];  then
     error_exit 'Sudo not found'
 fi
 
-cd $(dirname $0);
+cd $(dirname $0) || error_exit '';
 #установка необхомимых пакетов
 
 
@@ -51,7 +53,7 @@ install_packages $pd
 #запуск сервера postgres
 sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
 
-sudo -u postgres psql -c 'CREATE DATABASE appmarks' || echo 'БД appmarks уже существует'; 
+sudo -u postgres psql -c 'CREATE DATABASE appmarks' || error_exit 'БД appmarks уже существует'; 
 
 sudo -u postgres psql -c 'ALTER ROLE myapp WITH SUPERUSER';
  

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-ls -R app_marks/ | more
+source start.bash
+
+ls -R app_marks/ | more || error_exit 'Каталог app_marks не найден'
 echo "---------------------------------------------------------------------------"
 echo 'Users:'
 curl --ipv4 --location 'http://localhost:4567/api/users' | jq . | more
