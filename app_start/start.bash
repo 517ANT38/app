@@ -16,46 +16,47 @@ cd $(dirname $0) || error_exit '';
 
 
 pd='curl jq firewalld net-tools'
-pp='postgresql-contrib postgresql'
-function install_packages(){
-    if [ -x "$(command -v apk)" ];       then sudo apk add --no-cache $1
-    elif [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $1
+function install_packages(){    
+    if [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $1
     elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $1
-    elif [ -x "$(command -v dnf)" ];     then sudo dnf install $1'-server'
-    elif [ -x "$(command -v zypper)" ];  then sudo zypper install $1
+    elif [ -x "$(command -v dnf)" ];     then sudo dnf install $1
     elif [ -x "$(command -v yum)" ];  then sudo yum install $1
     else error_exit "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $1"; fi
+}
+
+function init_db_elem(){
+    sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'" || error_exit 'Такая роль уже существует';
+
+    sudo -u postgres psql -c 'CREATE DATABASE appmarks' || error_exit 'БД appmarks уже существует'; 
+
+    sudo -u postgres psql -c 'ALTER ROLE myapp WITH SUPERUSER';
 }
 
 # Проверяем, установлен ли пакет postgresql
 if [ -x "$(command -v postgres -V)" ]; then    
     echo "Сервер PostgreSQL установлен."
-else    
-    install_packages $pp;
-    sudo systemctl enable postgresql;
-    sudo postgresql-setup --initdb --unit postgresql
-    sudo systemctl start postgresql.service;
+else
 
-    sudo chmod -R o+wrx /etc/postgresql && sudo chmod 0750 o+wrx /etc/postgresql/**/data ||
-    sudo chmod -R o+wrx /var/lib/pgsql && sudo chmod 0750 /var/lib/pgsql/data || error_exit 'Каталога нет';
+    if [ [ -x "$(command -v dnf)" ] || [ -x "$(command -v yum)" ] ]; then 
+        install_packages 'postgresql-server';
+        sudo systemctl start postgresql;
+        init_db_elem;
+        sudo sed -i "s,#listen_addresses = 'localhost',listen_addresses = '*',g" /var/lib/pgsql/data/postgresql.conf
+        echo "host all all 0.0.0.0/0 md5" | sudo tee -a /var/lib/pgsql/data/pg_hba.conf
 
-    sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/**/main/pg_hba.conf || 
-    sudo sed -i "s/^#listen_addresses = 'localhost'/listen_addresses = '*'/" /var/lib/pgsql/pg_hba.conf  ||error_exit 'Файла нет'; 
-    
-    sudo echo 'all all all all trust' >> /etc/postgresql/**/main/pg_hba.conf 
-    || sudo echo 'all all all all trust' >> /var/lib/pgsql/pg_hba.conf || error_exit 'Файла нет';
- 
-    sudo systemctl restart postgresql.service;
+    else
+        install_packages 'postgresql';
+        init_db_elem;
+        sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/postgresql.conf
+        sudo sh -c "echo \"host    all    all    0.0.0.0/0    md5\" >> /etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/pg_hba.conf"
+    fi
+    sudo systemctl restart postgresql    
 fi
 
 install_packages $pd
 
 #запуск сервера postgres
-sudo -u postgres psql -c "CREATE ROLE myapp LOGIN PASSWORD 'myapp'";
 
-sudo -u postgres psql -c 'CREATE DATABASE appmarks' || error_exit 'БД appmarks уже существует'; 
-
-sudo -u postgres psql -c 'ALTER ROLE myapp WITH SUPERUSER';
  
 
 
