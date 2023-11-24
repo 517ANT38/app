@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+source functions_util.bash
 
 cd $(dirname $0) || error_exit '';
 cd ..

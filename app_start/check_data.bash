@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source functions_util.bash
+
 cd $(dirname $0)/.. || error_exit ''
 
 ls -R app_marks/ | more || error_exit 'Каталог app_marks не найден'
