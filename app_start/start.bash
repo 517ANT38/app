@@ -10,8 +10,8 @@ cd $(dirname $0) || error_exit '';
 #установка необхомимых пакетов
 
 
-pd='npm curl jq firewalld net-tools'
-function install_packages(){    
+
+function install_package(){    
     if [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $(echo $1)
     elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $(echo $1)
     elif [ -x "$(command -v dnf)" ];     then sudo dnf install $(echo $1)
@@ -34,7 +34,7 @@ if [ -x "$(command -v postgres -V)" ]; then
 else
 
     if  [ -x "$(command -v dnf || command -v yum)" ] ; then 
-        install_packages 'postgresql-server';
+        install_package 'postgresql-server';
         sudo postgresql-setup --initdb --unit postgresql
         sudo systemctl start postgresql;
         init_db_elem;
@@ -43,7 +43,7 @@ else
         sudo sed -i 's/ident/trust/g' /var/lib/pgsql/data/pg_hba.conf
     
     else
-        install_packages 'postgresql';        
+        install_package 'postgresql';        
         init_db_elem;
         sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/postgresql.conf
         sudo sh -c "echo \"host    all    all    0.0.0.0/0    md5\" >> /etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/pg_hba.conf"
@@ -52,8 +52,10 @@ else
     sudo systemctl restart postgresql    
 fi
 
-install_packages $pd
-
+install_package 'npm'
+install_package 'curl'
+install_package 'firewalld'
+install_package 'net-tools'
 
 
  
