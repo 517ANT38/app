@@ -83,10 +83,12 @@ source $NVM_DIR/nvm.sh;
 nvm install node
 nvm install-latest-npm
 npm install pm2 -g
+ln -s "$(which pm2)"
 cd -
 cd ..
 cd app_marks 
 npm install 
+
 
 #запуск приложения
 pm2 start -f --name app ./index.js 
