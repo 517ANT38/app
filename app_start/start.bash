@@ -84,7 +84,7 @@ nvm install node
 nvm install-latest-npm
 sudo npm install pm2 -g
 # cd -
-cd ..
+# cd ..
 cd app_marks 
 npm install 
 
