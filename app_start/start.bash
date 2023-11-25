@@ -71,7 +71,19 @@ sudo firewall-cmd --list-ports | grep '4567/tcp' || sudo firewall-cmd --permanen
 sudo firewall-cmd --reload
 
 # зависимости приложения
+# cd ~
+# if [[ -s $HOME/.nvm/nvm.sh ]] ; then
+#     echo "NVM is installed"
+# else
+#     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+    
+# fi
+# export NVM_DIR=$HOME/.nvm;
+# source $NVM_DIR/nvm.sh;
+nvm install node
+nvm install-latest-npm
 sudo npm install pm2 -g
+# cd -
 cd ..
 cd app_marks 
 npm install 
