@@ -12,10 +12,10 @@ cd $(dirname $0) || error_exit '';
 
 
 function install_package(){    
-    if [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $(echo $1)
-    elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $(echo $1)
-    elif [ -x "$(command -v dnf)" ];     then sudo dnf install $(echo $1)
-    elif [ -x "$(command -v yum)" ];  then sudo yum install $(echo $1)
+    if [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install -y $(echo $1)
+    elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install -y $(echo $1)
+    elif [ -x "$(command -v dnf)" ];     then sudo dnf install -y $(echo $1)
+    elif [ -x "$(command -v yum)" ];  then sudo yum install -y $(echo $1)
     else error_exit "FAILED TO INSTALL PACKAGE: Package manager not found. You must manually install: $1"; fi
 }
 
