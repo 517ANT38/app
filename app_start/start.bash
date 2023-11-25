@@ -82,7 +82,7 @@ export NVM_DIR=$HOME/.nvm;
 source $NVM_DIR/nvm.sh;
 nvm install node
 nvm install-latest-npm
-npm install pm2 -g
+sudo npm install pm2 -g
 cd -
 cd ..
 cd app_marks 
