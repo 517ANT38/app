@@ -40,14 +40,14 @@ else
         init_db_elem;
         sudo sed -i "s,#listen_addresses = 'localhost',listen_addresses = '*',g" /var/lib/pgsql/data/postgresql.conf
         sudo sh -c "echo \"host    all    all    0.0.0.0/0    md5\" >> /var/lib/pgsql/data/pg_hba.conf"
-        sudo sed -i 's/ident/trust/g' /var/lib/pgsql/data/pg_hba.conf
+        sudo sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
     
     else
         install_package 'postgresql';        
         init_db_elem;
         sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/" /etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/postgresql.conf
         sudo sh -c "echo \"host    all    all    0.0.0.0/0    md5\" >> /etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/pg_hba.conf"
-        sudo sed -i 's/ident/trust/g' "/etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/pg_hba.conf"
+        sudo sed -i 's/ident/md5/g' "/etc/postgresql/$(ls /etc/postgresql | awk '{printf $1}')/main/pg_hba.conf"
     fi
     sudo systemctl restart postgresql    
 fi
