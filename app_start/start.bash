@@ -10,7 +10,7 @@ cd $(dirname $0) || error_exit '';
 #установка необхомимых пакетов
 
 
-pd='curl jq firewalld net-tools'
+pd='curl jq firewalld net-tools node npm'
 function install_packages(){    
     if [ -x "$(command -v apt)" ];     then sudo apt update && sudo apt install $(echo $1)
     elif [ -x "$(command -v apt-get)" ]; then sudo apt-get update && sudo apt-get install $(echo $1)
@@ -71,20 +71,20 @@ sudo firewall-cmd --list-ports | grep '4567/tcp' || sudo firewall-cmd --permanen
 sudo firewall-cmd --reload
 
 # зависимости приложения
-cd ~
-if [[ -s $HOME/.nvm/nvm.sh ]] ; then
-    echo "NVM is installed"
-else
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+# cd ~
+# if [[ -s $HOME/.nvm/nvm.sh ]] ; then
+#     echo "NVM is installed"
+# else
+#     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
     
-fi
-export NVM_DIR=$HOME/.nvm;
-source $NVM_DIR/nvm.sh;
+# fi
+# export NVM_DIR=$HOME/.nvm;
+# source $NVM_DIR/nvm.sh;
 nvm install node
 nvm install-latest-npm
-npm install pm2 -g
-cd -
-cd ..
+sudo npm install pm2 -g
+# cd -
+# cd ..
 cd app_marks 
 npm install 
 
